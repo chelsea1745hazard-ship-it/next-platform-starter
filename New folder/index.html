@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Valentine for Zom 💘</title>
+  <style>
+    :root{
+      --bg1:#12071b;
+      --bg2:#2a0b2a;
+      --card: rgba(255,255,255,.10);
+      --card2: rgba(255,255,255,.14);
+      --text:#fff;
+      --muted: rgba(255,255,255,.78);
+      --accent:#ff4d8d;
+      --accent2:#ffb3c7;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans Thai",sans-serif;
+      color:var(--text);
+      min-height:100svh;
+      display:grid;
+      place-items:center;
+      padding:24px;
+      overflow-x:hidden;
+      background:
+        radial-gradient(900px 500px at 20% 20%, #3b0b3a, transparent 60%),
+        radial-gradient(800px 450px at 80% 30%, #7a103f, transparent 55%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+    }
+
+    /* Floating hearts */
+    .hearts{
+      position:fixed; inset:0; pointer-events:none; overflow:hidden;
+      opacity:.55;
+    }
+    .heart{
+      position:absolute;
+      width:14px; height:14px;
+      transform: rotate(45deg);
+      background: var(--accent);
+      animation: floatUp 7s linear infinite;
+      border-radius:2px;
+      filter: drop-shadow(0 6px 14px rgba(0,0,0,.35));
+    }
+    .heart::before,.heart::after{
+      content:"";
+      position:absolute;
+      width:14px; height:14px;
+      background: var(--accent);
+      border-radius:50%;
+    }
+    .heart::before{ left:-7px; top:0; }
+    .heart::after{ left:0; top:-7px; }
+
+    @keyframes floatUp{
+      from { transform: translateY(110vh) rotate(45deg); opacity:0; }
+      10% { opacity:1; }
+      to   { transform: translateY(-20vh) rotate(45deg); opacity:0; }
+    }
+
+    .wrap{
+      width:min(920px,100%);
+      display:grid;
+      gap:16px;
+    }
+    .card{
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: 0 24px 70px rgba(0,0,0,.45);
+      backdrop-filter: blur(10px);
+    }
+    .hero{
+      display:grid;
+      gap:12px;
+      text-align:center;
+      padding: 28px 22px;
+    }
+    .badge{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      justify-content:center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.14);
+      width: fit-content;
+      margin: 0 auto;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: .2px;
+    }
+    h1{
+      margin:0;
+      font-size: clamp(30px, 4vw, 48px);
+      line-height:1.05;
+    }
+    .subtitle{
+      margin:0;
+      color: var(--muted);
+      line-height:1.7;
+      font-size: 16px;
+    }
+    .ctaRow{
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top: 8px;
+    }
+    .btn{
+      border:0;
+      cursor:pointer;
+      font-weight:800;
+      padding:12px 16px;
+      border-radius: 14px;
+      transition: transform .08s ease, filter .15s ease, background .15s ease;
+      color: var(--text);
+    }
+    .btn:active{ transform: translateY(1px); }
+    .btn.primary{
+      background: linear-gradient(135deg, var(--accent), #ff2e74);
+      box-shadow: 0 14px 30px rgba(255,77,141,.28);
+    }
+    .btn.ghost{
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.16);
+      color: var(--muted);
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:16px;
+    }
+    @media (max-width: 860px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+    .noteTitle{ margin:0 0 8px; font-size:18px; }
+    .note{
+      margin:0;
+      color: var(--muted);
+      line-height:1.8;
+      white-space: pre-line;
+    }
+    .mini{
+      background: var(--card2);
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 18px;
+      padding: 16px;
+    }
+    .mini h3{ margin:0 0 6px; font-size:16px; }
+    .mini p{ margin:0; color: var(--muted); line-height:1.7; }
+    .footer{
+      text-align:center;
+      color: rgba(255,255,255,.55);
+      font-size: 13px;
+    }
+
+    /* Modal */
+    .overlay{
+      position:fixed; inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:22px;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(2px);
+      z-index: 50;
+    }
+    .overlay.open{ display:flex; }
+    .modal{
+      width:min(520px,100%);
+      background: rgba(20,10,26,.92);
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 30px 110px rgba(0,0,0,.65);
+      transform: translateY(10px);
+      opacity: 0;
+      transition: transform .15s ease, opacity .15s ease;
+    }
+    .overlay.open .modal{ transform: translateY(0); opacity: 1; }
+
+    .modal header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom: 8px;
+    }
+    .modal h2{ margin:0; font-size: 18px; }
+    .x{
+      border:0;
+      background: rgba(255,255,255,.10);
+      color: var(--muted);
+      border-radius: 12px;
+      padding: 8px 10px;
+      cursor:pointer;
+    }
+    .x:hover{ filter: brightness(1.05); color: var(--text); }
+    .modal .content{
+      color: var(--muted);
+      line-height:1.8;
+      padding: 6px 2px 10px;
+      white-space: pre-line;
+    }
+    .modal footer{
+      display:flex; gap:10px; justify-content:flex-end;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+  <!-- background hearts -->
+  <div class="hearts" id="hearts"></div>
+
+  <div class="wrap">
+    <section class="card hero">
+      <div class="badge">💘 Valentine Page</div>
+
+      <!-- ✅ จุดแก้ชื่อ -->
+      <h1>Happy Valentine’s Day, <span id="name">Zom</span> 💗</h1>
+
+      <!-- ✅ จุดแก้คำอธิบายสั้น -->
+      <p class="subtitle">
+        วันนี้อยากให้รู้ว่า… เธอสำคัญมาก ๆ สำหรับเรา 😊
+        กดปุ่มด้านล่างนะ มีอะไรจะบอก
+      </p>
+
+      <div class="ctaRow">
+        <button class="btn primary" id="openModal">กดอ่านคำสารภาพ 💌</button>
+        <button class="btn ghost" id="changeName">เปลี่ยนชื่อคนพิเศษ</button>
+      </div>
+    </section>
+
+    <section class="grid">
+      <section class="card">
+        <h2 class="noteTitle">ข้อความถึงเธอ ✨</h2>
+
+        <!-- ✅ จุดแก้ “ข้อความหลัก” -->
+        <p class="note" id="mainMessage">
+เธอคือคนที่ทำให้วันธรรมดากลายเป็นวันที่น่ารักขึ้น
+ขอบคุณที่อยู่ด้วยกันนะ 💞
+        </p>
+      </section>
+
+      <aside class="card">
+        <div class="mini">
+          <h3>🎁 เซอร์ไพรส์เล็ก ๆ</h3>
+          <p>กดปุ่ม “กดอ่านคำสารภาพ 💌” แล้วดูป็อปอัพ</p>
+        </div>
+        <div style="height:12px"></div>
+        <div class="mini">
+          <h3>🫶 Tips</h3>
+          <p>ป็อปอัพปิดได้ด้วยปุ่ม ✕, คลิกนอกกล่อง, หรือกด Esc</p>
+        </div>
+      </aside>
+    </section>
+
+    <div class="footer">made with 💗</div>
+  </div>
+
+  <!-- Modal -->
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <header>
+        <h2 id="modalTitle">ข้อความลับสำหรับ <span id="modalName">Zom</span> 💘</h2>
+        <button class="x" id="closeModal" aria-label="ปิดป็อปอัพ">✕</button>
+      </header>
+
+      <!-- ✅ จุดแก้ “ข้อความในป็อปอัพ” -->
+      <div class="content" id="popupMessage">
+เราไม่เก่งเรื่องพูดหวาน ๆ แต่…
+เราอยากอยู่ข้าง ๆ เธอไปนาน ๆ ได้ไหม 💞
+      </div>
+
+      <footer>
+        <button class="btn ghost" id="cancelBtn">เขินละ ปิดก่อน</button>
+        <button class="btn primary" id="okBtn">ได้เลย 💗</button>
+      </footer>
+    </section>
+  </div>
+
+  <script>
+    // Hearts generator
+    const hearts = document.getElementById("hearts");
+    function spawnHearts(){
+      hearts.innerHTML = "";
+      const count = 18;
+      for(let i=0;i<count;i++){
+        const h = document.createElement("div");
+        h.className = "heart";
+        const left = Math.random()*100;
+        const delay = Math.random()*4;
+        const duration = 5 + Math.random()*5;
+        const size = 10 + Math.random()*14;
+        h.style.left = left + "vw";
+        h.style.animationDelay = delay + "s";
+        h.style.animationDuration = duration + "s";
+        h.style.width = size + "px";
+        h.style.height = size + "px";
+        h.style.opacity = 0.35 + Math.random()*0.55;
+        hearts.appendChild(h);
+      }
+    }
+    spawnHearts();
+    window.addEventListener("resize", spawnHearts);
+
+    // Modal logic
+    const overlay = document.getElementById("overlay");
+    const openBtn = document.getElementById("openModal");
+    const closeBtn = document.getElementById("closeModal");
+    const cancelBtn = document.getElementById("cancelBtn");
+    const okBtn = document.getElementById("okBtn");
+
+    const nameEl = document.getElementById("name");
+    const modalNameEl = document.getElementById("modalName");
+    const changeNameBtn = document.getElementById("changeName");
+
+    let lastFocused = null;
+
+    function openModal(){
+      lastFocused = document.activeElement;
+      overlay.classList.add("open");
+      overlay.setAttribute("aria-hidden","false");
+      closeBtn.focus();
+      document.body.style.overflow = "hidden";
+    }
+    function closeModal(){
+      overlay.classList.remove("open");
+      overlay.setAttribute("aria-hidden","true");
+      document.body.style.overflow = "";
+      if(lastFocused) lastFocused.focus();
+    }
+
+    openBtn.addEventListener("click", openModal);
+    closeBtn.addEventListener("click", closeModal);
+    cancelBtn.addEventListener("click", closeModal);
+
+    okBtn.addEventListener("click", () => {
+      alert("เย้! 💗");
+      closeModal();
+    });
+
+    overlay.addEventListener("click", (e) => {
+      if(e.target === overlay) closeModal();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "Escape" && overlay.classList.contains("open")) closeModal();
+    });
+
+    // Change name
+    changeNameBtn.addEventListener("click", () => {
+      const newName = prompt("อยากให้เรียกชื่อว่าอะไรดี?", nameEl.textContent);
+      if(!newName) return;
+      nameEl.textContent = newName;
+      modalNameEl.textContent = newName;
+    });
+  </script>
+</body>
+</html>
